@@ -1,5 +1,10 @@
 const express = require('express')
+const http = require('http')
 const app = express()
+const server= http.createServer(app)
+
+const io = require('socket.io').listen(server)
+
 const mongoose = require('mongoose')
 const dburl = "mongodb+srv://tyelf22:Nike2299@cluster0-z9s3e.mongodb.net/test?retryWrites=true&w=majority"
 
@@ -8,11 +13,9 @@ let bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
-let http = require('http').Server(app)
-let io = require('socket.io')(http)
 
-let server = app.listen(3000, () => {
-    console.log('server is running on port', server.address().port)
+server.listen(3000, () => {
+    console.log('server is running on port 3000')
 })
 
 app.use(express.static(__dirname))
@@ -40,8 +43,8 @@ app.post('/messages', (req, res) => {
 })
 
 
-io.on('connection', () => {
-    console.log('a user conenected')
+io.on('connection', (err) => {
+    console.log('there was an error' + err)
 })
 
 
